@@ -5,6 +5,7 @@ const ctx = canvas.getContext("2d");
 
 const width = (canvas.width = window.innerWidth);
 const height = (canvas.height = window.innerHeight);
+const para = document.querySelector("p");
 
 // function to generate random number
 
@@ -77,19 +78,18 @@ class EvilCircle extends Shape {
     }
 
     collisionDetect() {
-        if (this.exists) {
-            for (const ball of balls) {
-                if (!(this === ball)) {
-                    const dx = this.x - ball.x;
-                    const dy = this.y - ball.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+        for (const ball of balls) {
+            if (!(this === ball)) {
+                const dx = this.x - ball.x;
+                const dy = this.y - ball.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
 
-                    if (distance < this.size + ball.size) {
-                        ball.exists = false;
-                    }
+                if (distance < this.size + ball.size) {
+                    ball.exists = false;
                 }
             }
         }
+
     }
 }
 
@@ -168,13 +168,17 @@ const evilCircle = new EvilCircle(30, 30);
 function loop() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
     ctx.fillRect(0, 0, width, height);
+
+    let count = 0;
     for (const ball of balls) {
         if (ball.exists) {
             ball.draw();
             ball.update();
             ball.collisionDetect();
+            count++;
         }
     }
+    para.textContent = "Ball count: " + count;
     evilCircle.draw();
     evilCircle.checkBounds();
     evilCircle.collisionDetect();
