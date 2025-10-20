@@ -130,16 +130,18 @@ class Ball extends Shape {
     }
 
     collisionDetect() {
+        if (!this.exists) {
+            return;
+        }
         if (this.exists) {
             for (const ball of balls) {
-                if (!(this === ball)) {
-                    const dx = this.x - ball.x;
-                    const dy = this.y - ball.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+                if (ball === this || !ball.exists) continue;
+                const dx = this.x - ball.x;
+                const dy = this.y - ball.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
 
-                    if (distance < this.size + ball.size) {
-                        ball.color = this.color = randomRGB();
-                    }
+                if (distance < this.size + ball.size) {
+                    ball.color = this.color = randomRGB();
                 }
             }
         }
@@ -163,7 +165,7 @@ while (balls.length < 25) {
 
     balls.push(ball);
 }
-const evilCircle = new EvilCircle(30, 30);
+const evilCircle = new EvilCircle(50, 50);
 
 function loop() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
